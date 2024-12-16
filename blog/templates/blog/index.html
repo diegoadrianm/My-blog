@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'blog/index.css' %}">
+{% endblock css_files %}
+    
+
+{% block page_title %}
+    Blog
+{% endblock page_title %}
+
+
+{% block content %}
+    <header id="main-navigation">
+        <h1><a href="">Diego's blog</a></h1>
+        <nav>
+            <a href="{% url 'blog-posts' %}">All posts</a>
+        </nav>
+    </header>
+    <section id="welcome">
+        <header>
+            <img src="{% static 'blog/images/programmer.png' %}" alt="Diego - The Author Of This Blog">
+            <h2>DIEGO'S BLOG</h2>
+        </header>
+        <p>Hi, I am Diego and I am a CS student</p>
+        <section id="latest-posts">
+            <h2>My Latest Thoughts</h2>
+
+            <ul>
+                <li>
+                    <article class="post">
+                        <a href="">
+                            <img src="{% static 'blog/images/mountains.jpg' %}" alt="Mountain Hiking">
+                            <div class="post__content">
+                                <h3>Mountain Hiking</h3>
+                                <p>There is nothing quite like the view of a mountain, I was not ready for what happened!</p>
+                            </div>
+                        </a>    
+                    </article>
+                </li>
+            </ul>
+        </section>
+    </section>
+
+    <section id="about">
+        <h2>What I Do</h2>
+        <p>
+            I love learning about almost everything, but specially about programming and technology
+        </p>
+        <p>
+            My goal is to learn new stuff and become a good developer!
+        </p>
+    </section>
+
+{% endblock content %}
+    
+    
