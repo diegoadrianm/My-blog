@@ -1,4 +1,5 @@
 #welcome {
+    width: 100%;
     background: linear-gradient(to right top, #05dd30, #02811b);
     padding: 6rem 12%;
 }
@@ -37,7 +38,7 @@
     background-color: white;
     padding: 2rem;
     border-radius: 12px;
-    width: 60rem;
+    width: 60dvw;
     margin: 2rem auto;
     box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.4);
 }
