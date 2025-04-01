@@ -16,6 +16,9 @@
 {% block content %}
 <section id="all-posts">
     <h2> {{tag.caption}} </h2>
+    <nav> 
+        <a href="{% url 'blog-posts' %}">Todos</a>
+    </nav>
     <ul>
         {% for  post in posts %}
             {% include 'blog/includes/post.html' %}
