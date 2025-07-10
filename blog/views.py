@@ -1,7 +1,10 @@
 """Module presenting the views funcitions for the blog application in this django project"""
 from django.shortcuts import render, get_object_or_404
-from .models import Post, Author, Tag
-from django.views.generic import ListView, DetailView
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.views.generic import View, ListView
+from .models import Post, Tag
+from .forms import CommentForm
 
 
 # def index(request):
@@ -34,7 +37,6 @@ class IndexListView(ListView):
 #     })
 
 
-
 class PostListView(ListView):
     model = Post
     template_name = "blog/all-posts.html"
@@ -54,30 +56,40 @@ class PostListView(ListView):
 #     })
 
 
-class PostDetailView(DetailView):
-    model = Post
+class PostDetailView(View):
 
-    def get_context_data(self, **kwargs):
-        post = get_object_or_404(Post, slug=self.kwargs["slug"])
-        context = super().get_context_data(**kwargs)
-        context["tags"] = post.tag.all()
-        return context
+    def get(self, request, slug):
+        desired_post = get_object_or_404(Post, slug=slug)
+        context = {
+            "post": desired_post,
+            "tags": desired_post.tag.all(),
+            "comment_form": CommentForm(),
+            "comments": desired_post.comments.all().order_by("-id")
+        }
+        return render(request, "blog/post_detail.html", context)
 
+    def post(self, request, slug):
+        comment_form = CommentForm(request.POST)
+        desired_post = get_object_or_404(Post, slug=slug)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.post = desired_post
+            comment.save()
 
-
-# def explore_tags(request, caption):
-#     tag = Tag.objects.get(caption=caption)
-#     posts = Post.objects.filter(tag=tag)
-#     return render(request, "blog/tags.html", {
-#         "posts": posts,
-#         "tag": tag,
-#     })
+            return HttpResponseRedirect(reverse("blog-post-details", args=[slug]))
+        context = {
+            "post": desired_post,
+            "tags": desired_post.tag.all(),
+            "comment_form": CommentForm(),
+            "comments": desired_post.comments.all()
+        }
+        return render(request, "blog/post_detail.html", context)
 
 
 class TagsListView(ListView):
     model = Post
     template_name = "blog/tags.html"
-    context_object_name="posts"
+    context_object_name = "posts"
 
     def get_queryset(self):
         base_queryset = super().get_queryset()
